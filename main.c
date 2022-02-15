@@ -33,8 +33,10 @@ int main(void) {
             case LOGO:
                 framesCounter++;
                 if (framesCounter > 300) {
+                    framesCounter = 0;
                     currentScreen = TITLE;
                 } else if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    framesCounter = 0;
                     currentScreen = TITLE;
                 }
                 break;
@@ -44,6 +46,7 @@ int main(void) {
                 }
                 break;
             case GAMEPLAY:
+                framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     currentScreen = ENDING;
                 }
@@ -75,7 +78,7 @@ int main(void) {
                     break;
                 case GAMEPLAY:
                     const char *message = "Gameplay to be added soon...\nText wrapping test:\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...";
-                    DrawTextBoxed(font, message, (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                    DrawTextBoxed(font, TextSubtext(message, 0, framesCounter/10), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                     break;
                 case ENDING:
                     const char *ending = "Thanks for playing!";
