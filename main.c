@@ -1,5 +1,8 @@
 // Text-based game using the raylib game library
 
+#include <stdio.h>
+#include <string.h>
+
 #include "raylib.h"
 #include "textwrap.h"
 
@@ -22,6 +25,10 @@ int main(void) {
     Rectangle container = { 25.0f, 25.0f, screenWidth - 50.0f, screenHeight - 200.0f };
 
     Font font = GetFontDefault();
+
+    const char *introduction = "You were on your way home one night from the nearby convenience store when all of a sudden, a deep fog surrounds you. "
+    "Confused, you try to feel your way through the fog. You feel a rather unfamiliar stone-like surface. When the fog clears, you then realize you're "
+    "in a medieval castle, surrounded by knights.\n\nYou've been transported back to the middle ages! Find your way back home!";
 
     int framesCounter = 0;
 
@@ -49,6 +56,11 @@ int main(void) {
             case INTRO:
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    framesCounter = strlen(introduction);
+                }
+                int choice = GetKeyPressed();
+                if (choice == KEY_ONE) {
+                    framesCounter = 0;
                     currentScreen = ENDING;
                 }
                 break;
@@ -78,10 +90,11 @@ int main(void) {
                     DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
                     break;
                 case INTRO:
-                    const char *introduction = "You were on your way home one night from the nearby convenience store when all of a sudden, a deep fog surrounds you. "
-                    "Confused, you try to feel your way through the fog. You feel a rather unfamiliar stone-like surface. When the fog clears, you then realize you're "
-                    "in a medieval castle, surrounded by knights.\n\nYou've been transported back to the middle ages! Find your way back home!";
+                    const char *decision1 = "[1]: Proceed";
                     DrawTextBoxed(font, TextSubtext(introduction, 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                    if (framesCounter >= strlen(introduction)) {
+                        DrawText(decision1, screenWidth/2.0f - MeasureText(decision1, 20)/2.0f, 300, 20, LIGHTGRAY);
+                    }
                     break;
                 case ENDING:
                     const char *ending = "Thanks for playing!";
