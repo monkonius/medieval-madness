@@ -6,10 +6,13 @@
 #include "raylib.h"
 #include "textwrap.h"
 
+#define MAX_PAGES 3
+
 typedef enum GameScreen {
     LOGO = 0,
     TITLE,
     INTRO,
+    GAMEPLAY,
     ENDING
 } GameScreen;
 
@@ -18,7 +21,7 @@ int main(void) {
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "Placeholder Title");
+    InitWindow(screenWidth, screenHeight, "Medieval Madness");
 
     GameScreen currentScreen = LOGO;
 
@@ -26,11 +29,21 @@ int main(void) {
 
     Font font = GetFontDefault();
 
-    const char *introduction = "You were on your way home one night from the nearby convenience store when all of a sudden, a deep fog surrounds you. "
-    "Confused, you try to feel your way through the fog. You feel a rather unfamiliar stone-like surface. When the fog clears, you then realize you're "
-    "in a medieval castle, surrounded by knights.\n\nYou've been transported back to the middle ages! Find your way back home!";
-
     int framesCounter = 0;
+
+    // Load text from file
+    char *gameText[MAX_PAGES];
+    char buffer[400];
+    FILE *fp;
+    fp = fopen("story.txt", "r");
+    if (fp == NULL) {
+        return 1;
+    }
+    int i = 0;
+    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+        gameText[i] = buffer;
+        i++;
+    }
 
     SetTargetFPS(60);
 
@@ -56,11 +69,17 @@ int main(void) {
             case INTRO:
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    framesCounter = strlen(introduction);
+                    framesCounter = strlen(gameText[0]);
                 }
                 int choice = GetKeyPressed();
-                if (choice == KEY_ONE) {
+                if (choice == KEY_ONE || choice == KEY_KP_1) {
                     framesCounter = 0;
+                    currentScreen = GAMEPLAY;
+                }
+                break;
+            case GAMEPLAY:
+                framesCounter++;
+                if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     currentScreen = ENDING;
                 }
                 break;
@@ -82,19 +101,23 @@ int main(void) {
                     DrawText(TextSubtext(presentation, 0, framesCounter/10), screenWidth/2.0f - MeasureText(presentation, 40)/2.0f, screenHeight/2.0f - 40, 40, MAROON);
                     break;
                 case TITLE:
-                    const char *title = "Placeholder Title";
+                    const char *title = "Medieval Madness";
                     const char *subtitle = "A text-based adventure";
-                    const char *proceed = "Press [ENTER] or [LMB] to start";
+                    const char *start = "Press [ENTER] or [LMB] to start";
                     DrawText(title, screenWidth/2.0f - MeasureText(title, 40)/2.0f, screenHeight/2.0f - 40, 40, MAROON);
                     DrawText(subtitle, screenWidth/2.0f - MeasureText(subtitle, 20)/2.0f, screenHeight/2.0f, 20, MAROON);
-                    DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                    DrawText(start, screenWidth/2.0f - MeasureText(start, 20)/2.0f, 300, 20, LIGHTGRAY);
                     break;
                 case INTRO:
-                    const char *decision1 = "[1]: Proceed";
-                    DrawTextBoxed(font, TextSubtext(introduction, 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
-                    if (framesCounter >= strlen(introduction)) {
-                        DrawText(decision1, screenWidth/2.0f - MeasureText(decision1, 20)/2.0f, 300, 20, LIGHTGRAY);
+                    const char *proceed = "[1]: Proceed";
+                    DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                    if (framesCounter >= strlen(gameText[0])) {
+                        DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
                     }
+                    break;
+                case GAMEPLAY:
+                    const char *prompt = "What shall you do?";
+                    DrawTextBoxed(font, TextSubtext(prompt, 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                     break;
                 case ENDING:
                     const char *ending = "Thanks for playing!";
