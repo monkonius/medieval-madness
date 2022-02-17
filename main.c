@@ -17,11 +17,10 @@ typedef enum GameScreen {
     ENDING
 } GameScreen;
 
-typedef enum StoryNode {
-    NODE1 = 0,
-    NODE2,
-    NODE3
-} StoryNode;
+typedef enum Introduction {
+    FIRST = 0,
+    LAST
+} Introduction;
 
 int main(void) {
     // Initialization
@@ -31,10 +30,9 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "Medieval Madness");
 
     GameScreen currentScreen = LOGO;
+    Introduction introScreen = FIRST;
 
-    int introScreen = 0;
-
-    Rectangle container = { 25.0f, 25.0f, screenWidth - 50.0f, screenHeight - 200.0f };
+    Rectangle container = { 25.0f, 25.0f, screenWidth - 50.0f, screenHeight - 250.0f };
 
     Font font = GetFontDefault();
 
@@ -84,14 +82,14 @@ int main(void) {
                 }
                 int choice = GetKeyPressed();
                 switch (introScreen) {
-                    case 0: {
+                    case FIRST: {
                         if (choice == KEY_ONE || choice == KEY_KP_1) {
                             framesCounter = 0;
                             introScreen = 1;
                         }
                         break;
                     }
-                    case 1:
+                    case LAST:
                         if (choice == KEY_ONE || choice == KEY_KP_1) {
                             framesCounter = 0;
                             currentScreen = GAMEPLAY;
@@ -138,17 +136,17 @@ int main(void) {
                 case INTRO: {
                     const char *proceed = "[1]: Proceed";
                     switch (introScreen) {
-                        case 0: {
+                        case FIRST: {
                             DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                             if (framesCounter >= strlen(gameText[0])) {
-                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
                             }
                             break;
                         }
-                        case 1: {
+                        case LAST: {
                             DrawTextBoxed(font, TextSubtext(gameText[1], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                             if (framesCounter >= strlen(gameText[1])) {
-                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
                             }
                             break;
                         }
