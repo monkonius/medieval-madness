@@ -6,7 +6,8 @@
 #include "raylib.h"
 #include "textwrap.h"
 
-#define MAX_PAGES 3
+#define MAX_LINES 3
+#define MAX_CHAR 350
 
 typedef enum GameScreen {
     LOGO = 0,
@@ -15,6 +16,12 @@ typedef enum GameScreen {
     GAMEPLAY,
     ENDING
 } GameScreen;
+
+typedef enum StoryNode {
+    NODE1 = 0,
+    NODE2,
+    NODE3
+} StoryNode;
 
 int main(void) {
     // Initialization
@@ -25,6 +32,8 @@ int main(void) {
 
     GameScreen currentScreen = LOGO;
 
+    int introScreen = 0;
+
     Rectangle container = { 25.0f, 25.0f, screenWidth - 50.0f, screenHeight - 200.0f };
 
     Font font = GetFontDefault();
@@ -32,8 +41,8 @@ int main(void) {
     int framesCounter = 0;
 
     // Load text from file
-    char *gameText[MAX_PAGES];
-    char buffer[400];
+    char gameText[MAX_LINES][MAX_CHAR];
+    char buffer[MAX_CHAR];
     FILE *fp;
     fp = fopen("story.txt", "r");
     if (fp == NULL) {
@@ -41,7 +50,7 @@ int main(void) {
     }
     int i = 0;
     while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-        gameText[i] = buffer;
+        strcpy(gameText[i], buffer);
         i++;
     }
 
@@ -74,9 +83,20 @@ int main(void) {
                     framesCounter = strlen(gameText[0]);
                 }
                 int choice = GetKeyPressed();
-                if (choice == KEY_ONE || choice == KEY_KP_1) {
-                    framesCounter = 0;
-                    currentScreen = GAMEPLAY;
+                switch (introScreen) {
+                    case 0: {
+                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                            framesCounter = 0;
+                            introScreen = 1;
+                        }
+                        break;
+                    }
+                    case 1:
+                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                            framesCounter = 0;
+                            currentScreen = GAMEPLAY;
+                        }
+                        break;
                 }
                 break;
             }
@@ -117,9 +137,21 @@ int main(void) {
                 }
                 case INTRO: {
                     const char *proceed = "[1]: Proceed";
-                    DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
-                    if (framesCounter >= strlen(gameText[0])) {
-                        DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                    switch (introScreen) {
+                        case 0: {
+                            DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[0])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case 1: {
+                            DrawTextBoxed(font, TextSubtext(gameText[1], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[1])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
                     }
                     break;
                 }
