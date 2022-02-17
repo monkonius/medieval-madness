@@ -51,7 +51,7 @@ int main(void) {
     while (!WindowShouldClose()) {
         // Update
         switch (currentScreen) {
-            case LOGO:
+            case LOGO: {
                 framesCounter++;
                 if (framesCounter > 300) {
                     framesCounter = 0;
@@ -61,12 +61,14 @@ int main(void) {
                     currentScreen = TITLE;
                 }
                 break;
-            case TITLE:
+            }
+            case TITLE: {
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     currentScreen = INTRO;
                 }
                 break;
-            case INTRO:
+            }
+            case INTRO: {
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     framesCounter = strlen(gameText[0]);
@@ -77,14 +79,17 @@ int main(void) {
                     currentScreen = GAMEPLAY;
                 }
                 break;
-            case GAMEPLAY:
+            }
+            case GAMEPLAY: {
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     currentScreen = ENDING;
                 }
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
 
         // Draw
@@ -96,11 +101,12 @@ int main(void) {
             DrawRectangleLinesEx(container, 1, MAROON);
 
             switch (currentScreen) {
-                case LOGO:
+                case LOGO: {
                     const char *presentation = "Mike Tee presents...";
                     DrawText(TextSubtext(presentation, 0, framesCounter/10), screenWidth/2.0f - MeasureText(presentation, 40)/2.0f, screenHeight/2.0f - 40, 40, MAROON);
                     break;
-                case TITLE:
+                }
+                case TITLE: {
                     const char *title = "Medieval Madness";
                     const char *subtitle = "A text-based adventure";
                     const char *start = "Press [ENTER] or [LMB] to start";
@@ -108,23 +114,28 @@ int main(void) {
                     DrawText(subtitle, screenWidth/2.0f - MeasureText(subtitle, 20)/2.0f, screenHeight/2.0f, 20, MAROON);
                     DrawText(start, screenWidth/2.0f - MeasureText(start, 20)/2.0f, 300, 20, LIGHTGRAY);
                     break;
-                case INTRO:
+                }
+                case INTRO: {
                     const char *proceed = "[1]: Proceed";
                     DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                     if (framesCounter >= strlen(gameText[0])) {
                         DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 300, 20, LIGHTGRAY);
                     }
                     break;
-                case GAMEPLAY:
+                }
+                case GAMEPLAY: {
                     const char *prompt = "What shall you do?";
                     DrawTextBoxed(font, TextSubtext(prompt, 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                     break;
-                case ENDING:
+                }
+                case ENDING: {
                     const char *ending = "Thanks for playing!";
                     DrawText(ending, screenWidth/2.0f - MeasureText(ending, 40)/2.0f, screenHeight/2.0f - 40, 40, LIGHTGRAY);
                     break;
-                default:
+                }
+                default: {
                     break;
+                }
             }
 
         EndDrawing();
