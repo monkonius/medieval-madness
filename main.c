@@ -76,17 +76,16 @@ int main(void) {
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     framesCounter = MAX_CHAR;
                 }
-                choice = GetKeyPressed();
                 switch (introScreen) {
                     case INTRO1: {
-                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
                             framesCounter = 0;
                             introScreen = INTRO2;
                         }
                         break;
                     }
                     case INTRO2:
-                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
                             framesCounter = 0;
                             currentScreen = GAMEPLAY;
                         }
@@ -99,13 +98,12 @@ int main(void) {
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                     framesCounter = MAX_CHAR;
                 }
-                choice = GetKeyPressed();
                 switch (storyScreen) {
                     case FORK1: {
-                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
                             framesCounter = 0;
                             storyScreen = CHOICE1_1;
-                        } else if (choice == KEY_TWO || choice == KEY_KP_2) {
+                        } else if (IsKeyPressed(KEY_TWO) || IsKeyPressed(KEY_KP_2)) {
                             framesCounter = 0;
                             storyScreen = CHOICE1_2;
                         }
@@ -204,7 +202,13 @@ int main(void) {
                             break;
                         }
                         case FORK2: {
+                            const char *spell = "[1]: Cast spell";
+                            const char *potion = "[2]: Brew potion";
                             DrawTextBoxed(font, TextSubtext(gameText[5], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[5])) {
+                                DrawText(spell, screenWidth/2.0f - MeasureText(spell, 20)/2.0f, 275, 20, LIGHTGRAY);
+                                DrawText(potion, screenWidth/2.0f - MeasureText(potion, 20)/2.0f, 300, 20, LIGHTGRAY);
+                            }
                             break;
                         }
                         default: {
