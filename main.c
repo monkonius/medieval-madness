@@ -9,18 +9,8 @@
 #define MAX_LINES 3
 #define MAX_CHAR 350
 
-typedef enum GameScreen {
-    LOGO = 0,
-    TITLE,
-    INTRO,
-    GAMEPLAY,
-    ENDING
-} GameScreen;
-
-typedef enum Introduction {
-    FIRST = 0,
-    LAST
-} Introduction;
+typedef enum GameScreen { LOGO, TITLE, INTRO, GAMEPLAY, ENDING } GameScreen;
+typedef enum Introduction { FIRST, LAST } Introduction;
 
 int main(void) {
     // Initialization
@@ -32,7 +22,7 @@ int main(void) {
     GameScreen currentScreen = LOGO;
     Introduction introScreen = FIRST;
 
-    Rectangle container = { 25.0f, 25.0f, screenWidth - 50.0f, screenHeight - 250.0f };
+    Rectangle container = { 25.0f, 50.0f, screenWidth - 50.0f, screenHeight - 250.0f };
 
     Font font = GetFontDefault();
 
@@ -116,7 +106,7 @@ int main(void) {
             ClearBackground(RAYWHITE);
 
             // For testing
-            DrawRectangleLinesEx(container, 1, MAROON);
+            // DrawRectangleLinesEx(container, 1, MAROON);
 
             switch (currentScreen) {
                 case LOGO: {
