@@ -1,2 +1,6 @@
 You were on your way home one night from the nearby convenience store when a deep fog suddenly envelops around you. Confused, you slowly try to make your way through. As you wave your arms aimlessly in front of you, a rather peculiar stone-like surface appears while the fog begins to dissipate.
-With the fog cleared, you then realize you're in a totally unfamiliar setting: a medieval castle! Surrounded by knights and maidens, no less! You've been transported to the middle ages! Find your way back home!
+With the fog cleared, you then realize you're in a totally unfamiliar setting: a medieval castle! Surrounded by knights and maidens, no less! By their manner of speech and dress, it dawns upon you that you've been transported to the middle ages! Find your way back home!
+Recovering from your initial shock, you wonder what to do next... Seek the king of this castle immediately or approach one of the knights? What shall you do?
+You hurriedly make your way towards the castle's throne room when you are abruptly halted by the guards. Your sudden appearance has put the castle folk ill at ease, and your intention to make your way towards the king directly has been cause enough for the guards to shackle you with impunity.
+You calmly approach one of the knights and express your desire to return back home. The humble knight, noticing your distress amidst strange circumstances, points you toward the court wizard and alerts the castle guards that you are of not a threat to the king.
+Fork 2

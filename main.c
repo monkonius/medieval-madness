@@ -6,11 +6,12 @@
 #include "raylib.h"
 #include "textwrap.h"
 
-#define MAX_LINES 3
+#define MAX_LINES 6
 #define MAX_CHAR 350
 
-typedef enum GameScreen { LOGO, TITLE, INTRO, GAMEPLAY, ENDING } GameScreen;
-typedef enum Introduction { FIRST, LAST } Introduction;
+typedef enum GameScreen { LOGO, TITLE, INTRO, GAMEPLAY, GAMEOVER, ENDING } GameScreen;
+typedef enum Introduction { INTRO1, INTRO2 } Introduction;
+typedef enum StoryScreen { FORK1, FORK2, CHOICE1_1, CHOICE1_2 } StoryScreen;
 
 int main(void) {
     // Initialization
@@ -20,13 +21,18 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "Medieval Madness");
 
     GameScreen currentScreen = LOGO;
-    Introduction introScreen = FIRST;
+    Introduction introScreen = INTRO1;
+    StoryScreen storyScreen = FORK1;
 
     Rectangle container = { 25.0f, 50.0f, screenWidth - 50.0f, screenHeight - 250.0f };
 
     Font font = GetFontDefault();
 
+    const char *proceed = "[1]: Proceed";
+
     int framesCounter = 0;
+
+    int choice;
 
     // Load text from file
     char gameText[MAX_LINES][MAX_CHAR];
@@ -68,18 +74,18 @@ int main(void) {
             case INTRO: {
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    framesCounter = strlen(gameText[0]);
+                    framesCounter = MAX_CHAR;
                 }
-                int choice = GetKeyPressed();
+                choice = GetKeyPressed();
                 switch (introScreen) {
-                    case FIRST: {
+                    case INTRO1: {
                         if (choice == KEY_ONE || choice == KEY_KP_1) {
                             framesCounter = 0;
-                            introScreen = 1;
+                            introScreen = INTRO2;
                         }
                         break;
                     }
-                    case LAST:
+                    case INTRO2:
                         if (choice == KEY_ONE || choice == KEY_KP_1) {
                             framesCounter = 0;
                             currentScreen = GAMEPLAY;
@@ -91,7 +97,36 @@ int main(void) {
             case GAMEPLAY: {
                 framesCounter++;
                 if (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    currentScreen = ENDING;
+                    framesCounter = MAX_CHAR;
+                }
+                choice = GetKeyPressed();
+                switch (storyScreen) {
+                    case FORK1: {
+                        if (choice == KEY_ONE || choice == KEY_KP_1) {
+                            framesCounter = 0;
+                            storyScreen = CHOICE1_1;
+                        } else if (choice == KEY_TWO || choice == KEY_KP_2) {
+                            framesCounter = 0;
+                            storyScreen = CHOICE1_2;
+                        }
+                        break;
+                    }
+                    case CHOICE1_1: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            currentScreen = GAMEOVER;
+                        }
+                        break;
+                    }
+                    case CHOICE1_2: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            framesCounter = 0;
+                            storyScreen = FORK2;
+                        }
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
                 break;
             }
@@ -124,16 +159,15 @@ int main(void) {
                     break;
                 }
                 case INTRO: {
-                    const char *proceed = "[1]: Proceed";
                     switch (introScreen) {
-                        case FIRST: {
+                        case INTRO1: {
                             DrawTextBoxed(font, TextSubtext(gameText[0], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                             if (framesCounter >= strlen(gameText[0])) {
                                 DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
                             }
                             break;
                         }
-                        case LAST: {
+                        case INTRO2: {
                             DrawTextBoxed(font, TextSubtext(gameText[1], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                             if (framesCounter >= strlen(gameText[1])) {
                                 DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
@@ -144,8 +178,44 @@ int main(void) {
                     break;
                 }
                 case GAMEPLAY: {
-                    const char *prompt = "What shall you do?";
-                    DrawTextBoxed(font, TextSubtext(prompt, 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                    switch (storyScreen) {
+                        case FORK1: {
+                            const char *king = "[1]: Seek the king";
+                            const char *knight = "[2]: Approach one of the knights";
+                            DrawTextBoxed(font, TextSubtext(gameText[2], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[2])) {
+                                DrawText(king, screenWidth/2.0f - MeasureText(king, 20)/2.0f, 275, 20, LIGHTGRAY);
+                                DrawText(knight, screenWidth/2.0f - MeasureText(knight, 20)/2.0f, 300, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case CHOICE1_1: {
+                            DrawTextBoxed(font, TextSubtext(gameText[3], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[3])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case CHOICE1_2: {
+                            DrawTextBoxed(font, TextSubtext(gameText[4], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[4])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case FORK2: {
+                            DrawTextBoxed(font, TextSubtext(gameText[5], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case GAMEOVER: {
+                    const char *over = "GAME OVER...";
+                    DrawText(over, screenWidth/2.0f - MeasureText(over, 40)/2.0f, screenHeight/2.0f - 40, 40, MAROON);
                     break;
                 }
                 case ENDING: {
