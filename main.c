@@ -6,12 +6,12 @@
 #include "raylib.h"
 #include "textwrap.h"
 
-#define MAX_LINES 6
-#define MAX_CHAR 350
+#define MAX_LINES 9
+#define MAX_CHAR 400
 
 typedef enum GameScreen { LOGO, TITLE, INTRO, GAMEPLAY, GAMEOVER, ENDING } GameScreen;
 typedef enum Introduction { INTRO1, INTRO2 } Introduction;
-typedef enum StoryScreen { FORK1, FORK2, CHOICE1_1, CHOICE1_2 } StoryScreen;
+typedef enum StoryScreen { FORK1, FORK2, CHOICE1_1, CHOICE1_2, CHOICE2_1, CHOICE2_2, FINAL } StoryScreen;
 
 int main(void) {
     // Initialization
@@ -31,8 +31,6 @@ int main(void) {
     const char *proceed = "[1]: Proceed";
 
     int framesCounter = 0;
-
-    int choice;
 
     // Load text from file
     char gameText[MAX_LINES][MAX_CHAR];
@@ -109,6 +107,16 @@ int main(void) {
                         }
                         break;
                     }
+                    case FORK2: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            framesCounter = 0;
+                            storyScreen = CHOICE2_1;
+                        } else if (IsKeyPressed(KEY_TWO) || IsKeyPressed(KEY_KP_2)) {
+                            framesCounter = 0;
+                            storyScreen = CHOICE2_2;
+                        }
+                        break;
+                    }
                     case CHOICE1_1: {
                         if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
                             currentScreen = GAMEOVER;
@@ -119,6 +127,25 @@ int main(void) {
                         if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
                             framesCounter = 0;
                             storyScreen = FORK2;
+                        }
+                        break;
+                    }
+                    case CHOICE2_1: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            currentScreen = GAMEOVER;
+                        }
+                        break;
+                    }
+                    case CHOICE2_2: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            framesCounter = 0;
+                            storyScreen = FINAL;
+                        }
+                        break;
+                    }
+                    case FINAL: {
+                        if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
+                            currentScreen = ENDING;
                         }
                         break;
                     }
@@ -137,9 +164,6 @@ int main(void) {
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-
-            // For testing
-            // DrawRectangleLinesEx(container, 1, MAROON);
 
             switch (currentScreen) {
                 case LOGO: {
@@ -187,6 +211,16 @@ int main(void) {
                             }
                             break;
                         }
+                        case FORK2: {
+                            const char *spell = "[1]: Cast spell";
+                            const char *potion = "[2]: Brew potion";
+                            DrawTextBoxed(font, TextSubtext(gameText[5], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[5])) {
+                                DrawText(spell, screenWidth/2.0f - MeasureText(spell, 20)/2.0f, 275, 20, LIGHTGRAY);
+                                DrawText(potion, screenWidth/2.0f - MeasureText(potion, 20)/2.0f, 300, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
                         case CHOICE1_1: {
                             DrawTextBoxed(font, TextSubtext(gameText[3], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
                             if (framesCounter >= strlen(gameText[3])) {
@@ -201,13 +235,24 @@ int main(void) {
                             }
                             break;
                         }
-                        case FORK2: {
-                            const char *spell = "[1]: Cast spell";
-                            const char *potion = "[2]: Brew potion";
-                            DrawTextBoxed(font, TextSubtext(gameText[5], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
-                            if (framesCounter >= strlen(gameText[5])) {
-                                DrawText(spell, screenWidth/2.0f - MeasureText(spell, 20)/2.0f, 275, 20, LIGHTGRAY);
-                                DrawText(potion, screenWidth/2.0f - MeasureText(potion, 20)/2.0f, 300, 20, LIGHTGRAY);
+                        case CHOICE2_1: {
+                            DrawTextBoxed(font, TextSubtext(gameText[6], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[6])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case CHOICE2_2: {
+                            DrawTextBoxed(font, TextSubtext(gameText[7], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[7])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
+                            }
+                            break;
+                        }
+                        case FINAL: {
+                            DrawTextBoxed(font, TextSubtext(gameText[8], 0, framesCounter), (Rectangle){ container.x + 4, container.y + 4, container.width - 4, container.height - 4 }, 20.0f, 2.0f, true, DARKGRAY);
+                            if (framesCounter >= strlen(gameText[8])) {
+                                DrawText(proceed, screenWidth/2.0f - MeasureText(proceed, 20)/2.0f, 275, 20, LIGHTGRAY);
                             }
                             break;
                         }
