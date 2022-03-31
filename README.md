@@ -1,6 +1,8 @@
 # Medieval Madness: A text-based adventure
 #### Video Demo: https://youtu.be/Z_EBlKSC5TA
 #### Description:
+
+This is my final project for Harvard's Introduction to Computer Science course CS50x via their OpenCourseWare site.
 *Medieval Madness* is a short text-based adventure game written in the C programming language, and makes use of the [raylib](https://www.raylib.com/) game library made by Ramon Santamaria. Visual novels like the *Ace Attorney* games were the main inspiration for creating a text adventure game for this final project, which allowed me to express creativity in the writing process as well as implement game logic along the way.
 
 The game was written incrementally in order to have easier testing and debugging, where I was able to quickly identify and fix bugs and unexpected behavior. This worked well even though I was working on my own given the relatively small scale of the game.
