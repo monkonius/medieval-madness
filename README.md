@@ -1,5 +1,8 @@
 # Medieval Madness: A text-based adventure
 #### Video Demo: https://youtu.be/Z_EBlKSC5TA
+
+<img width="912" alt="title-screen" src="https://github.com/monkonius/medieval-madness/assets/65208909/0227ba38-7809-43ed-8a1b-03bd8fef3b66">
+
 #### Description:
 
 This is my final project for Harvard's Introduction to Computer Science course CS50x via their OpenCourseWare site.
@@ -40,3 +43,4 @@ Rectangle container = { 25.0f, 50.0f, screenWidth - 50.0f, screenHeight - 250.0f
 These particular functions were helpful since I did not have to manually determine where each newline had to be inserted in the story text, which would have taken a much longer time given that I would have to deal with multiple lines of text. I then decided to just include these functions rather than directly insert them into `main.c` so that it would not clutter and lengthen the code, as well as make it easier to refer to the functions when needed.
 
 Apart from these files, I also have a `Makefile` to aid in compiling the game and avoid having to manually type all of the arguments in the terminal each time I needed to test the program.
+<img width="912" alt="dialogue-option" src="https://github.com/monkonius/medieval-madness/assets/65208909/839dcf69-57d4-4040-83ba-975956f64a76">
